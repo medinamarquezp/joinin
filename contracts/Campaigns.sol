@@ -32,4 +32,12 @@ contract Campaigns is Ownable {
         });
         return true;
     }
+
+    function deactivateUser(
+        address _userAddress
+    ) public onlyOwner returns (bool) {
+        require(isUserActive(_userAddress), "Invalid user");
+        registeredUsers[_userAddress].active = false;
+        return true;
+    }
 }
