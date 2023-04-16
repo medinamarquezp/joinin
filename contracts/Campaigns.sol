@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
+import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
@@ -14,6 +15,8 @@ contract Campaigns is Ownable {
     mapping(address => uint256[]) userCampaigns;
     mapping(Categories => uint256[]) categoriesCampaigns;
     mapping(uint256 => Campaign) registeredCampaigns;
+
+    event status(string _message);
 
     function isUserActive(address _userAddress) public view returns (bool) {
         return
@@ -76,6 +79,14 @@ contract Campaigns is Ownable {
         });
         userCampaigns[msg.sender].push(id);
         categoriesCampaigns[_category].push(id);
+        emit status(
+            string.concat(
+                "New campaign created by ",
+                registeredUsers[msg.sender].name,
+                " with ID ",
+                Strings.toString(id)
+            )
+        );
         return id;
     }
 
