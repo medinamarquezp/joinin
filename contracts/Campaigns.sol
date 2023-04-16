@@ -1,12 +1,19 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
+import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 import {User, Campaign, Status, Categories} from "./Entities.sol";
 
 contract Campaigns is Ownable {
+    using Counters for Counters.Counter;
+    Counters.Counter internal campaignId;
+
     mapping(address => User) registeredUsers;
+    mapping(address => uint256[]) userCampaigns;
+    mapping(Categories => uint256[]) categoriesCampaigns;
+    mapping(uint256 => Campaign) registeredCampaigns;
 
     function isUserActive(address _userAddress) public view returns (bool) {
         return
@@ -39,5 +46,54 @@ contract Campaigns is Ownable {
         require(isUserActive(_userAddress), "Invalid user");
         registeredUsers[_userAddress].active = false;
         return true;
+    }
+
+    function getNextCampaignId() internal returns (uint256) {
+        campaignId.increment();
+        return campaignId.current();
+    }
+
+    function registerCampaign(
+        Categories _category,
+        string memory _title,
+        string memory _description,
+        uint256 _goal
+    ) public returns (uint256) {
+        require(
+            isUserActive(msg.sender),
+            "User must be active to register a new campaign"
+        );
+        uint256 id = getNextCampaignId();
+        registeredCampaigns[id] = Campaign({
+            category: _category,
+            status: Status.OPEN,
+            owner: msg.sender,
+            title: _title,
+            description: _description,
+            goal: _goal,
+            createdAt: block.timestamp,
+            reachedAt: 0
+        });
+        userCampaigns[msg.sender].push(id);
+        categoriesCampaigns[_category].push(id);
+        return id;
+    }
+
+    function getUserCampaigns(
+        address _userAddress
+    ) public view returns (uint256[] memory) {
+        return userCampaigns[_userAddress];
+    }
+
+    function getCategoryCampaigns(
+        Categories _category
+    ) public view returns (uint256[] memory) {
+        return categoriesCampaigns[_category];
+    }
+
+    function getCampaign(
+        uint256 _campaignId
+    ) public view returns (Campaign memory) {
+        return registeredCampaigns[_campaignId];
     }
 }
