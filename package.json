@@ -1,0 +1,21 @@
+{
+  "name": "joinin",
+  "version": "1.0.0",
+  "description": "Be part of the change in a decentralized and transparent way. Join in.",
+  "scripts": {
+    "test": "truffle test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/medinamarquezp/joinin.git"
+  },
+  "author": "Pedro Medina",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/medinamarquezp/joinin/issues"
+  },
+  "homepage": "https://github.com/medinamarquezp/joinin#readme",
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.8.3"
+  }
+}
