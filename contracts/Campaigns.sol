@@ -21,7 +21,7 @@ contract Campaigns is Ownable {
     ) public returns (bool) {
         require(
             registeredUsers[msg.sender].createdAt == 0,
-            "User already register"
+            "User already registered"
         );
         registeredUsers[msg.sender] = User({
             name: _name,
