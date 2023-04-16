@@ -5,6 +5,7 @@ struct User {
     string name;
     string lastname;
     string email;
+    uint256 createdAt;
     bool active;
 }
 
