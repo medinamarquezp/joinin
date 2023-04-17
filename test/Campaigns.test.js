@@ -74,4 +74,25 @@ contract("Campaigns tests", (accounts) => {
     );
     assert.equal(campaign.goal, "1000", "Should validate campaign goal");
   });
+
+  it("Should close a campaign", async () => {
+    await truffleAssert.fails(
+      campaigns.closeCampaign(100),
+      truffleAssert.ErrorType.REVERT,
+      "Invalid campaign"
+    );
+    await truffleAssert.fails(
+      campaigns.closeCampaign(1, { from: accounts[3] }),
+      truffleAssert.ErrorType.REVERT,
+      "This operation is only available for campaign owner or contract owner"
+    );
+    await campaigns.closeCampaign(1);
+    await truffleAssert.fails(
+      campaigns.closeCampaign(1),
+      truffleAssert.ErrorType.REVERT,
+      "Campaign already closed"
+    );
+    const campaign = await campaigns.getCampaign(1);
+    assert.equal(campaign.status, 2, "Campaign status should be closed");
+  });
 });

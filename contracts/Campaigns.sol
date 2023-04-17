@@ -107,4 +107,25 @@ contract Campaigns is Ownable {
     ) public view returns (Campaign memory) {
         return registeredCampaigns[_campaignId];
     }
+
+    function closeCampaign(uint256 _campaignId) public returns (bool) {
+        Campaign memory campaign = registeredCampaigns[_campaignId];
+        require(campaign.createdAt > 0, "Invalid campaign");
+        require(
+            msg.sender == campaign.owner || msg.sender == owner(),
+            "This operation is only available for campaign owner or contract owner"
+        );
+        require(campaign.status != Status.CLOSED, "Campaign already closed");
+        campaign.status = Status.CLOSED;
+        registeredCampaigns[_campaignId] = campaign;
+        emit status(
+            string.concat(
+                "Campaign with id ",
+                Strings.toString(_campaignId),
+                " closed by ",
+                registeredUsers[msg.sender].name
+            )
+        );
+        return true;
+    }
 }
