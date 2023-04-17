@@ -15,6 +15,7 @@ contract Campaigns is Ownable {
     mapping(address => uint256[]) userCampaigns;
     mapping(Categories => uint256[]) categoriesCampaigns;
     mapping(uint256 => Campaign) registeredCampaigns;
+    mapping(uint256 => mapping(address => bool)) campaignSupporters;
 
     event status(string _message);
 
@@ -75,7 +76,8 @@ contract Campaigns is Ownable {
             description: _description,
             goal: _goal,
             createdAt: block.timestamp,
-            reachedAt: 0
+            reachedAt: 0,
+            supporters: new address[](0)
         });
         userCampaigns[msg.sender].push(id);
         categoriesCampaigns[_category].push(id);
@@ -127,5 +129,63 @@ contract Campaigns is Ownable {
             )
         );
         return true;
+    }
+
+    function signCampaign(uint256 _campaignId) public returns (bool) {
+        require(
+            isUserActive(msg.sender),
+            "User must be active to sign a campaign"
+        );
+        Campaign memory campaign = registeredCampaigns[_campaignId];
+        require(
+            msg.sender != campaign.owner,
+            "Campaign owner cannot sign its own campaign"
+        );
+        require(
+            campaignSupporters[_campaignId][msg.sender] == false,
+            "Campaign already signed"
+        );
+        require(campaign.createdAt > 0, "Invalid campaign");
+        require(campaign.status == Status.OPEN, "Invalid status");
+        require(campaign.category == Categories.SIGNATURE, "Invalid category");
+
+        registeredCampaigns[_campaignId].supporters.push(msg.sender);
+        campaignSupporters[_campaignId][msg.sender] = true;
+        emit status(
+            string.concat(
+                "Campaign with id ",
+                Strings.toString(_campaignId),
+                " signed by ",
+                registeredUsers[msg.sender].name
+            )
+        );
+        if (campaign.supporters.length + 1 >= campaign.goal) {
+            registeredCampaigns[_campaignId].status = Status.REACHED;
+            registeredCampaigns[_campaignId].reachedAt = block.timestamp;
+            emit status(
+                string.concat(
+                    "Campaign with id ",
+                    Strings.toString(_campaignId),
+                    " has reached the goal of ",
+                    Strings.toString(campaign.goal),
+                    " signatures"
+                )
+            );
+        }
+        return true;
+    }
+
+    function totalSupporters(
+        uint256 _campaignId
+    ) public view returns (uint256) {
+        return registeredCampaigns[_campaignId].supporters.length;
+    }
+
+    function signaturesToReachGoal(
+        uint256 _campaignId
+    ) public view returns (uint256) {
+        return
+            registeredCampaigns[_campaignId].goal -
+            registeredCampaigns[_campaignId].supporters.length;
     }
 }

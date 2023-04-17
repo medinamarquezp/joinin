@@ -95,4 +95,66 @@ contract("Campaigns tests", (accounts) => {
     const campaign = await campaigns.getCampaign(1);
     assert.equal(campaign.status, 2, "Campaign status should be closed");
   });
+
+  it("Should sign a campaign", async () => {
+    await campaigns.registerCampaign(
+      0,
+      "Signature campaign",
+      "Campaign description",
+      1000
+    );
+    await truffleAssert.fails(
+      campaigns.signCampaign(2, { from: accounts[2] }),
+      truffleAssert.ErrorType.REVERT,
+      "User must be active to sign a campaign"
+    );
+    await truffleAssert.fails(
+      campaigns.signCampaign(2),
+      truffleAssert.ErrorType.REVERT,
+      "Campaign owner cannot sign its own campaign"
+    );
+    await campaigns.register("Account2", "Test", "account2@test.es", {
+      from: accounts[2],
+    });
+    await campaigns.signCampaign(2, { from: accounts[2] });
+    await truffleAssert.fails(
+      campaigns.signCampaign(2, { from: accounts[2] }),
+      truffleAssert.ErrorType.REVERT,
+      "Campaign already signed"
+    );
+    await truffleAssert.fails(
+      campaigns.signCampaign(100),
+      truffleAssert.ErrorType.REVERT,
+      "Invalid campaign"
+    );
+    await campaigns.registerCampaign(
+      1,
+      "Fundraising campaign",
+      "Campaign description",
+      5
+    );
+    await truffleAssert.fails(
+      campaigns.signCampaign(3, { from: accounts[2] }),
+      truffleAssert.ErrorType.REVERT,
+      "Invalid category"
+    );
+    await campaigns.closeCampaign(3);
+    await truffleAssert.fails(
+      campaigns.signCampaign(3, { from: accounts[2] }),
+      truffleAssert.ErrorType.REVERT,
+      "Invalid status"
+    );
+    const totalSupporters = await campaigns.totalSupporters(2);
+    assert.equal(
+      totalSupporters.toString(),
+      "1",
+      "Campaign should be supported by one user"
+    );
+    const signaturesToReachGoal = await campaigns.signaturesToReachGoal(2);
+    assert.equal(
+      signaturesToReachGoal.toString(),
+      "999",
+      "Campaign should need 999 supporters to reach goal"
+    );
+  });
 });

@@ -29,4 +29,5 @@ struct Campaign {
     uint256 goal;
     uint256 createdAt;
     uint256 reachedAt;
+    address[] supporters;
 }
