@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Be part of the change in a decentralized and transparent way. Join in.",
   "scripts": {
-    "test": "truffle test"
+    "test": "truffle test",
+    "ganache": "npx ganache-cli"
   },
   "repository": {
     "type": "git",
