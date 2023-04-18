@@ -4,8 +4,10 @@
 
 <header>
 	<div class="brand">
-		<IconCirclesRelation size={40} stroke={2} />
-		<span>join.in</span>
+		<a href="/">
+			<IconCirclesRelation size={40} stroke={2} />
+			<span>join.in</span>
+		</a>
 	</div>
 	<nav>
 		<ul class="main-nav">

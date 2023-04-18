@@ -7,7 +7,7 @@
 		@apply bg-slate-100 text-lg text-slate-700;
 	}
 	h1 {
-		@apply text-4xl font-normal;
+		@apply text-4xl font-normal mb-6;
 	}
 	h2 {
 		@apply text-2xl font-normal;
@@ -21,10 +21,10 @@
 	header {
 		@apply flex py-8 items-center justify-between;
 	}
-	.brand {
+	.brand a {
 		@apply flex text-3xl font-bold text-violet-900;
 	}
-	.brand span {
+	.brand a span {
 		@apply ml-1;
 	}
 	.main-nav {

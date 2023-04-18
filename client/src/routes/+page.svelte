@@ -1,5 +1,5 @@
 <script>
-	import LastCampaigns from '$lib/components/campaigns/last-campaigns.svelte';
+	import CampaignsList from '$lib/components/campaigns/campaigns-list.svelte';
 </script>
 
 <div class="flex py-10">
@@ -9,4 +9,4 @@
 		>.
 	</h1>
 </div>
-<LastCampaigns />
+<CampaignsList title="Últimas campañas" items={3} />

@@ -1,9 +1,11 @@
 <script lang="ts">
+	export let title: string;
+	export let items: number;
 	import { IconSignature } from '@tabler/icons-svelte';
 </script>
 
 <section>
-	<h2>Últimas campañas</h2>
+	<h2>{title}</h2>
 	<div class="card-container">
 		<div class="card">
 			<div class="date">Creada hace 3 días</div>
