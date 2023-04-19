@@ -36,6 +36,9 @@
 				<a href="/campaigns/start">Iniciar Petición</a>
 			</li>
 			<li>
+				<a href="/register">Registro</a>
+			</li>
+			<li>
 				<a href="#">Socios</a>
 			</li>
 			<li>
