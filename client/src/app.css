@@ -39,6 +39,9 @@
 	.btn span {
 		@apply ml-1;
 	}
+	.connected {
+		@apply py-2 px-4 bg-slate-200 rounded-lg;
+	}
 	.card-container {
 		@apply flex flex-row gap-4 my-4;
 	}
