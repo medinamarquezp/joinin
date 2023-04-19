@@ -1,24 +1,23 @@
 <script lang="ts">
-	import { connect, getNetworkName } from '$lib/web3';
-	import { toast, toastTypes } from '$lib/toast';
 	import { IconCirclesRelation, IconWallet } from '@tabler/icons-svelte';
-	let web3 = undefined;
-	let accounts: string[] = [];
-	let networkId = 0;
-	$: networkName = networkId && getNetworkName(networkId);
-	$: connectedAccount = accounts.length && `0x${accounts[0].slice(-5)}`;
+	import { toast, toastTypes } from '$lib/toast';
+	import { upsert, configStore } from '$lib/stores/config.store';
+	import { connect, getNetworkName } from '$lib/web3';
 	async function handleConnect() {
 		try {
-			web3 = await connect();
-			if (web3.eth) {
-				accounts = await web3.eth.getAccounts();
-				networkId = await web3.eth.net.getId();
+			const web3 = await connect();
+			const accounts = await web3.eth.getAccounts();
+			const networkId = await web3.eth.net.getId();
+			if (networkId && accounts.length) {
+				upsert('connectedAccount', `${getNetworkName(networkId)} 0x${accounts[0].slice(-5)}`);
 			}
 		} catch (err) {
 			const error = err as Error;
 			toast(error.message, toastTypes.ERROR);
 		}
 	}
+	let account = '';
+	configStore.subscribe((data) => (account = data.connectedAccount));
 </script>
 
 <header>
@@ -37,15 +36,15 @@
 				<a href="/campaigns/start">Iniciar Petición</a>
 			</li>
 			<li>
-				<a href="/members">Socios</a>
+				<a href="#">Socios</a>
 			</li>
 			<li>
-				<a href="/about">Sobre Joinin</a>
+				<a href="#">Sobre Joinin</a>
 			</li>
 		</ul>
 	</nav>
-	{#if networkId}
-		<div class="connected">Connected to {networkName} <strong>{connectedAccount}</strong></div>
+	{#if account}
+		<div class="connected">Connected to <strong>{account}</strong></div>
 	{:else}
 		<button class="btn" on:click={handleConnect}>
 			<IconWallet size={36} stroke={2} />

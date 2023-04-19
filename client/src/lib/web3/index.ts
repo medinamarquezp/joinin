@@ -32,3 +32,13 @@ export const connect = async (): Web3 => {
 		throw new Error(error.message);
 	}
 };
+
+export const getWeb3 = () => {
+	if (window.ethereum) {
+		return new Web3(window.ethereum);
+	}
+	if (window.web3) {
+		return window.web3;
+	}
+	return null;
+};
