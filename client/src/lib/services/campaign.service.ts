@@ -42,4 +42,21 @@ export class CampaignService {
 		const contract = await this.getContract();
 		return await contract.methods.isUserActive(address).call();
 	}
+
+	async registerUser(
+		address: string,
+		name: string,
+		lastname: string,
+		email: string
+	): Promise<boolean> {
+		try {
+			const contract = await this.getContract();
+			await contract.methods.register(name, lastname, email).send({
+				from: address
+			});
+			return true;
+		} catch (error) {
+			return false;
+		}
+	}
 }

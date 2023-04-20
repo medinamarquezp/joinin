@@ -60,4 +60,26 @@
 	.card .details span {
 		@apply font-bold mx-1;
 	}
+	form {
+		@apply w-full max-w-lg;
+	}
+	form .field {
+		@apply flex items-start mb-6;
+	}
+	form .field .label {
+		@apply w-2/6;
+	}
+	form .field .label label {
+		@apply block text-slate-800 text-left mb-1 pr-2;
+	}
+	form .field .input {
+		@apply w-4/6;
+	}
+	form .field .input input,
+	form .field .input textarea {
+		@apply bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-slate-700 leading-tight focus:outline-none focus:bg-white focus:border-slate-500;
+	}
+	form .btn {
+		@apply bg-violet-900 hover:bg-violet-950 text-white py-2 px-6 rounded;
+	}
 }
