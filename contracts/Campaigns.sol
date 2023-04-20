@@ -10,6 +10,7 @@ import {User, Campaign, Status, Categories} from "./Entities.sol";
 contract Campaigns is Ownable {
     using Counters for Counters.Counter;
     Counters.Counter internal campaignId;
+    uint256[] campaignIds;
 
     mapping(address => User) registeredUsers;
     mapping(address => uint256[]) userCampaigns;
@@ -81,6 +82,7 @@ contract Campaigns is Ownable {
         });
         userCampaigns[msg.sender].push(id);
         categoriesCampaigns[_category].push(id);
+        campaignIds.push(id);
         emit status(
             string.concat(
                 "New campaign created by ",
@@ -92,10 +94,18 @@ contract Campaigns is Ownable {
         return id;
     }
 
+    function getCampaignIds() public view returns (uint256[] memory) {
+        return campaignIds;
+    }
+
     function getUserCampaigns(
         address _userAddress
     ) public view returns (uint256[] memory) {
         return userCampaigns[_userAddress];
+    }
+
+    function getCategories() public pure returns (uint8[2] memory) {
+        return [0, 1];
     }
 
     function getCategoryCampaigns(
