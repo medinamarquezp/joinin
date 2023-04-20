@@ -6,7 +6,7 @@ const networks = {
 };
 
 export const getNetworkName = (id: number): string => {
-	return networks[id];
+	return networks[id] || id.toString();
 };
 
 export const connect = async (): Web3 => {
