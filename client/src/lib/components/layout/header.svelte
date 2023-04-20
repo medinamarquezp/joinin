@@ -9,15 +9,17 @@
 			const accounts = await web3.eth.getAccounts();
 			const networkId = await web3.eth.net.getId();
 			if (networkId && accounts.length) {
-				upsert('connectedAccount', `${getNetworkName(networkId)} (0x${accounts[0].slice(-5)})`);
+				upsert('connection', `${getNetworkName(networkId)} (0x${accounts[0].slice(-5)})`);
+				upsert('network', getNetworkName(networkId));
+				upsert('account', accounts[0]);
 			}
 		} catch (err) {
 			const error = err as Error;
 			toast(error.message, toastTypes.ERROR);
 		}
 	};
-	let account = '';
-	configStore.subscribe((data) => (account = data.connectedAccount));
+	let connection = '';
+	configStore.subscribe((data) => (connection = data.connection));
 </script>
 
 <header>
@@ -46,8 +48,8 @@
 			</li>
 		</ul>
 	</nav>
-	{#if account}
-		<div class="connected">Connected to <strong>{account}</strong></div>
+	{#if connection}
+		<div class="connected">Connected to <strong>{connection}</strong></div>
 	{:else}
 		<button class="btn" on:click={handleConnect}>
 			<IconWallet size={36} stroke={2} />

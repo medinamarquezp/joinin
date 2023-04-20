@@ -2,7 +2,9 @@ import { get as getStore } from 'svelte/store';
 import { persisted } from 'svelte-local-storage-store';
 
 const baseConfigStore = {
-	connectedAccount: ''
+	connection: '',
+	account: '',
+	network: ''
 };
 
 export const configStore = persisted('config', baseConfigStore);
