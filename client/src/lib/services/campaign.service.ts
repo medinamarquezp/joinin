@@ -37,4 +37,9 @@ export class CampaignService {
 		}
 		return campaigns;
 	}
+
+	async isUserActive(address: string): Promise<boolean> {
+		const contract = await this.getContract();
+		return await contract.methods.isUserActive(address).call();
+	}
 }
