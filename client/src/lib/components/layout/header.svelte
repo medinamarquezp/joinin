@@ -9,7 +9,7 @@
 			const accounts = await web3.eth.getAccounts();
 			const networkId = await web3.eth.net.getId();
 			if (networkId && accounts.length) {
-				upsert('connectedAccount', `${getNetworkName(networkId)} 0x${accounts[0].slice(-5)}`);
+				upsert('connectedAccount', `${getNetworkName(networkId)} (0x${accounts[0].slice(-5)})`);
 			}
 		} catch (err) {
 			const error = err as Error;
@@ -22,7 +22,7 @@
 
 <header>
 	<div class="brand">
-		<a href="/">
+		<a data-sveltekit-reload href="/">
 			<IconCirclesRelation size={40} stroke={2} />
 			<span>join.in</span>
 		</a>
