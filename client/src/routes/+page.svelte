@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import CampaignsList from '$lib/components/campaigns/campaigns-list.svelte';
 </script>
 
