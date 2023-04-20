@@ -3,7 +3,7 @@
 	import { toast, toastTypes } from '$lib/toast';
 	import { upsert, configStore } from '$lib/stores/config.store';
 	import { connect, getNetworkName } from '$lib/web3';
-	async function handleConnect() {
+	const handleConnect = async () => {
 		try {
 			const web3 = await connect();
 			const accounts = await web3.eth.getAccounts();
@@ -15,14 +15,14 @@
 			const error = err as Error;
 			toast(error.message, toastTypes.ERROR);
 		}
-	}
+	};
 	let account = '';
 	configStore.subscribe((data) => (account = data.connectedAccount));
 </script>
 
 <header>
 	<div class="brand">
-		<a data-sveltekit-reload href="/">
+		<a href="/">
 			<IconCirclesRelation size={40} stroke={2} />
 			<span>join.in</span>
 		</a>
