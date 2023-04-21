@@ -18,6 +18,7 @@ export class CampaignService {
 			campaignIds = campaignIds.slice(items * -1);
 		}
 		const campaigns: Campaign[] = [];
+		campaignIds = campaignIds.toReversed();
 		for (const campaignId of campaignIds) {
 			const campaignData = await contract.methods.getCampaign(campaignId).call();
 			const campaign: Campaign = {
@@ -50,6 +51,24 @@ export class CampaignService {
 		try {
 			const contract = await this.getContract();
 			await contract.methods.register(name, lastname, email).send({
+				from: address
+			});
+			return true;
+		} catch (error) {
+			return false;
+		}
+	}
+
+	async registerCampaign(
+		address: string,
+		category: number,
+		title: string,
+		description: string,
+		goal: number
+	): Promise<boolean> {
+		try {
+			const contract = await this.getContract();
+			await contract.methods.registerCampaign(category, title, description, goal).send({
 				from: address
 			});
 			return true;
