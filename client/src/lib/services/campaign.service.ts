@@ -1,5 +1,4 @@
 import type Web3 from 'web3';
-import type { AbiItem } from 'web3-utils';
 import { env } from '$env/dynamic/public';
 import { CampaignCategories, type Campaign, CampaignStatus } from '$lib/types/campaign.types';
 
@@ -7,10 +6,9 @@ export class CampaignService {
 	constructor(private web3: Web3) {}
 
 	private async getContract() {
-		const contract = await import(`${env.PUBLIC_CONTRACTS_PATH}/Campaigns.json`);
-		const contractABI = contract.abi as unknown as AbiItem;
-		const contractAddress = contract.networks[`${env.PUBLIC_NETWORK_ID}`].address;
-		return new this.web3.eth.Contract(contractABI, contractAddress);
+		const abi = JSON.parse(env.PUBLIC_CAMPAIGNS_ABI);
+		const address = env.PUBLIC_CAMPAIGNS_ADDRESS;
+		return new this.web3.eth.Contract(abi, address);
 	}
 
 	async getCampaignList(items: number): Promise<Campaign[]> {
