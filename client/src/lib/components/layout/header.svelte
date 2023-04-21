@@ -1,8 +1,11 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { IconCirclesRelation, IconWallet } from '@tabler/icons-svelte';
 	import { toast, toastTypes } from '$lib/toast';
-	import { upsert, configStore } from '$lib/stores/config.store';
-	import { connect, getNetworkName } from '$lib/web3';
+	import { connect, getNetworkName, getWeb3 } from '$lib/web3';
+	import { upsert, get, configStore } from '$lib/stores/config.store';
+	import { CampaignService } from '$lib/services/campaign.service';
+
 	const handleConnect = async () => {
 		try {
 			const web3 = await connect();
@@ -18,6 +21,20 @@
 			toast(error.message, toastTypes.ERROR);
 		}
 	};
+
+	const checkActiveUser = async () => {
+		const account = get('account') as string;
+		if (!account) return false;
+		const web3 = getWeb3();
+		const campaignService = new CampaignService(web3);
+		return await campaignService.isUserActive(account);
+	};
+
+	let isActiveUser = false;
+	onMount(async () => {
+		isActiveUser = await checkActiveUser();
+	});
+
 	let connection = '';
 	configStore.subscribe((data) => (connection = data.connection));
 </script>
@@ -37,15 +54,11 @@
 			<li>
 				<a href="/campaigns/start">Iniciar Petición</a>
 			</li>
-			<li>
-				<a href="/register">Registro</a>
-			</li>
-			<li>
-				<a href="#">Socios</a>
-			</li>
-			<li>
-				<a href="#">Sobre Joinin</a>
-			</li>
+			{#if !isActiveUser}
+				<li>
+					<a href="/register">Registro</a>
+				</li>
+			{/if}
 		</ul>
 	</nav>
 	{#if connection}
