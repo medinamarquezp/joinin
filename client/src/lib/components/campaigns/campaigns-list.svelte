@@ -2,6 +2,8 @@
 	export let title: string;
 	export let items: number;
 
+	import { es } from 'date-fns/locale';
+	import { formatDistanceToNow } from 'date-fns';
 	import { IconSignature } from '@tabler/icons-svelte';
 	import { getWeb3 } from '$lib/web3';
 	import { CampaignService } from '$lib/services/campaign.service';
@@ -25,7 +27,7 @@
 			{#if campaigns.length}
 				{#each campaigns as { title, supporters, createdAt }}
 					<div class="card">
-						<div class="date">Creada hace 3 días</div>
+						<div class="date">Creada hace {formatDistanceToNow(createdAt, { locale: es })}</div>
 						<div class="content">
 							{title}
 						</div>

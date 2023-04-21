@@ -1,4 +1,5 @@
 import type Web3 from 'web3';
+import { fromUnixTime } from 'date-fns';
 import { env } from '$env/dynamic/public';
 import { CampaignCategories, type Campaign, CampaignStatus } from '$lib/types/campaign.types';
 
@@ -27,7 +28,7 @@ export class CampaignService {
 				ownerAddress: campaignData.owner,
 				title: campaignData.title,
 				description: campaignData.description,
-				createdAt: new Date(campaignData.createdAt),
+				createdAt: fromUnixTime(Number(campaignData.createdAt)),
 				goal: Number(campaignData.goal),
 				reachedAt: campaignData.reachedAt ? new Date(campaignData.reachedAt) : null,
 				supporters: campaignData.supporters.length
