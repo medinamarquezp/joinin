@@ -2,7 +2,7 @@
 	export let title: string;
 	export let items: number;
 
-	import { es } from 'date-fns/locale';
+	import { es } from 'date-fns/locale/index.js';
 	import { formatDistanceToNow } from 'date-fns';
 	import { IconSignature } from '@tabler/icons-svelte';
 	import { getWeb3 } from '$lib/web3';
