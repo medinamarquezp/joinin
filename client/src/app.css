@@ -69,7 +69,8 @@
 	form .field .label {
 		@apply w-2/6;
 	}
-	form .field .label label {
+	form .field .label label,
+	form .field .label span {
 		@apply block text-slate-800 text-left mb-1 pr-2;
 	}
 	form .field .input {

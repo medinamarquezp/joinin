@@ -38,7 +38,7 @@
 </p>
 <form on:submit|preventDefault={handleSubmit}>
 	<div class="field">
-		<div class="label"><label>Dirección</label></div>
+		<div class="label"><span>Dirección</span></div>
 		<div class="input font-bold">{address || '0x'}</div>
 	</div>
 	<div class="field">
