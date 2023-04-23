@@ -43,4 +43,6 @@ module.exports = {
       version: "0.8.19",
     },
   },
+  plugins: ["truffle-plugin-verify"],
+  api_keys: { etherscan: ETH_SCAN_API_KEY },
 };
