@@ -6,8 +6,8 @@
 	import { formatDistanceToNow } from 'date-fns';
 	import { IconSignature } from '@tabler/icons-svelte';
 	import { getWeb3 } from '$lib/web3';
-	import { CampaignService } from '$lib/services/campaign.service';
 	import InfoMessage from '$lib/components/generics/info.svelte';
+	import { CampaignService } from '$lib/services/campaign.service';
 
 	let getCampaignsList = async () => {
 		const web3 = getWeb3();
