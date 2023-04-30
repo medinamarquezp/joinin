@@ -21,6 +21,7 @@ enum Status {
 }
 
 struct Campaign {
+    uint256 id;
     Categories category;
     Status status;
     address owner;

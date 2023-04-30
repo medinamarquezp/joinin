@@ -70,6 +70,7 @@ contract Campaigns is Ownable {
         );
         uint256 id = getNextCampaignId();
         registeredCampaigns[id] = Campaign({
+            id: id,
             category: _category,
             status: Status.OPEN,
             owner: msg.sender,
