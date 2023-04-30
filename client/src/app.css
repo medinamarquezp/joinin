@@ -4,7 +4,7 @@
 
 @layer components {
 	body {
-		@apply bg-slate-100 text-lg text-slate-700;
+		@apply bg-slate-100 text-lg text-slate-800;
 	}
 	h1 {
 		@apply text-4xl font-normal mb-6;
@@ -46,7 +46,10 @@
 		@apply flex flex-row gap-4 my-4;
 	}
 	.card {
-		@apply p-6 bg-slate-50 w-1/3 rounded-lg;
+		@apply text-slate-800 p-6 bg-slate-50 w-1/3 rounded-lg;
+	}
+	.card:hover {
+		@apply transition drop-shadow-xl cursor-pointer;
 	}
 	.card .date {
 		@apply text-xs pb-2;

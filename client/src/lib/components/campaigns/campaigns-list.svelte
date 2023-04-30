@@ -25,8 +25,8 @@
 	{:then campaigns}
 		<div class="card-container">
 			{#if campaigns.length}
-				{#each campaigns as { title, supporters, createdAt }}
-					<div class="card">
+				{#each campaigns as { id, title, supporters, createdAt }}
+					<a href="/campaigns/{id}" class="card">
 						<div class="date">Creada hace {formatDistanceToNow(createdAt, { locale: es })}</div>
 						<div class="content">
 							{title}
@@ -34,7 +34,7 @@
 						<div class="details">
 							<IconSignature size={16} stroke={2} /> <span>{supporters}</span> Firmantes
 						</div>
-					</div>
+					</a>
 				{/each}
 			{:else}
 				<InfoMessage message={NoCampaignsMessage} />

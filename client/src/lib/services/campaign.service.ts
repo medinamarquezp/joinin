@@ -1,17 +1,15 @@
 import type Web3 from 'web3';
 import { fromUnixTime } from 'date-fns';
 import { env } from '$env/dynamic/public';
-import { CampaignCategories, type Campaign, CampaignStatus } from '$lib/types/campaign.types';
+import {
+	CampaignCategories,
+	type Campaign,
+	CampaignStatus,
+	type ContractCampaign
+} from '$lib/types/campaign.types';
 
 export class CampaignService {
 	constructor(private web3: Web3) {}
-
-	private async getContract() {
-		const abi = JSON.parse(env.PUBLIC_CAMPAIGNS_ABI);
-		const address = env.PUBLIC_CAMPAIGNS_ADDRESS;
-		return new this.web3.eth.Contract(abi, address);
-	}
-
 	async getCampaignList(items: number): Promise<Campaign[]> {
 		const contract = await this.getContract();
 		let campaignIds = await contract.methods.getCampaignIds().call();
@@ -22,17 +20,7 @@ export class CampaignService {
 		campaignIds = campaignIds.toReversed();
 		for (const campaignId of campaignIds) {
 			const campaignData = await contract.methods.getCampaign(campaignId).call();
-			const campaign: Campaign = {
-				category: CampaignCategories[campaignData.category],
-				status: CampaignStatus[campaignData.status],
-				ownerAddress: campaignData.owner,
-				title: campaignData.title,
-				description: campaignData.description,
-				createdAt: fromUnixTime(Number(campaignData.createdAt)),
-				goal: Number(campaignData.goal),
-				reachedAt: campaignData.reachedAt ? new Date(campaignData.reachedAt) : null,
-				supporters: campaignData.supporters.length
-			};
+			const campaign = this.parseCampaignData(campaignData);
 			campaigns.push(campaign);
 		}
 		return campaigns;
@@ -76,5 +64,37 @@ export class CampaignService {
 		} catch (error) {
 			return false;
 		}
+	}
+
+	async getCampaignDetails(id: number): Promise<Campaign | null> {
+		try {
+			const contract = await this.getContract();
+			const campaignData = await contract.methods.getCampaign(id).call();
+			if (!campaignData) return null;
+			return this.parseCampaignData(campaignData);
+		} catch (error) {
+			return null;
+		}
+	}
+
+	private async getContract() {
+		const abi = JSON.parse(env.PUBLIC_CAMPAIGNS_ABI);
+		const address = env.PUBLIC_CAMPAIGNS_ADDRESS;
+		return new this.web3.eth.Contract(abi, address);
+	}
+
+	private parseCampaignData(campaignData: ContractCampaign): Campaign {
+		return {
+			id: Number(campaignData.id),
+			category: CampaignCategories[campaignData.category],
+			status: CampaignStatus[campaignData.status],
+			ownerAddress: campaignData.owner,
+			title: campaignData.title,
+			description: campaignData.description,
+			createdAt: fromUnixTime(Number(campaignData.createdAt)),
+			goal: Number(campaignData.goal),
+			reachedAt: campaignData.reachedAt ? fromUnixTime(Number(campaignData.createdAt)) : null,
+			supporters: campaignData.supporters.length
+		};
 	}
 }

@@ -1,15 +1,29 @@
 export const CampaignCategories: { [key: string]: string } = {
-	'0': 'signature',
-	'1': 'fundraising'
+	'0': 'Recogida de firmas',
+	'1': 'Recaudación de fondos'
 };
 
 export const CampaignStatus: { [key: string]: string } = {
-	'0': 'open',
-	'1': 'reached',
-	'2': 'closed'
+	'0': 'Abierta',
+	'1': 'Objetivo logrado',
+	'2': 'Cerrada'
 };
 
+export interface ContractCampaign {
+	id: string;
+	category: string;
+	status: string;
+	owner: string;
+	title: string;
+	description: string;
+	createdAt: string;
+	goal: string;
+	reachedAt: string;
+	supporters: string[];
+}
+
 export interface Campaign {
+	id: number;
 	category: string;
 	status: string;
 	ownerAddress: string;
