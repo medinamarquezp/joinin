@@ -1,6 +1,7 @@
 <script lang="ts">
 	export let title: string;
 	export let items: number;
+	export let address: string | null = null;
 
 	import { es } from 'date-fns/locale/index.js';
 	import { formatDistanceToNow } from 'date-fns';
@@ -9,12 +10,13 @@
 	import InfoMessage from '$lib/components/generics/info.svelte';
 	import { CampaignService } from '$lib/services/campaign.service';
 
-	let getCampaignsList = async () => {
+	let getCampaigns = async (address?: string | null) => {
 		const web3 = getWeb3();
 		const campaignService = new CampaignService(web3);
-		return await campaignService.getCampaignList(items);
+		return await campaignService.getCampaignList(items, address);
 	};
-	let campaigns = getCampaignsList();
+
+	let campaigns = getCampaigns(address);
 	let NoCampaignsMessage = 'No se han encontrado campañas publicadas para la red seleccionada.';
 </script>
 

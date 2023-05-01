@@ -9,17 +9,30 @@ import {
 import { config } from '../../config/platform.config';
 
 export class CampaignService {
-	constructor(private web3: Web3) {}
-	async getCampaignList(items: number): Promise<Campaign[]> {
-		const contract = await this.getContract();
-		let campaignIds = await contract.methods.getCampaignIds().call();
+	private contract;
+
+	constructor(private web3: Web3) {
+		this.contract = this.getContract();
+	}
+
+	async getCampaignIds(items: number, address?: string | null): Promise<string[]> {
+		let campaignIds;
+		if (address) {
+			campaignIds = await this.contract.methods.getUserCampaigns(address).call();
+		} else {
+			campaignIds = await this.contract.methods.getCampaignIds().call();
+		}
 		if (items < campaignIds.length) {
 			campaignIds = campaignIds.slice(items * -1);
 		}
+		return campaignIds.toReversed();
+	}
+
+	async getCampaignList(items: number, address?: string | null): Promise<Campaign[]> {
+		let campaignIds = await this.getCampaignIds(items, address);
 		const campaigns: Campaign[] = [];
-		campaignIds = campaignIds.toReversed();
 		for (const campaignId of campaignIds) {
-			const campaignData = await contract.methods.getCampaign(campaignId).call();
+			const campaignData = await this.contract.methods.getCampaign(campaignId).call();
 			const campaign = this.parseCampaignData(campaignData);
 			campaigns.push(campaign);
 		}
@@ -27,8 +40,7 @@ export class CampaignService {
 	}
 
 	async isUserActive(address: string): Promise<boolean> {
-		const contract = await this.getContract();
-		return await contract.methods.isUserActive(address).call();
+		return await this.contract.methods.isUserActive(address).call();
 	}
 
 	async registerUser(
@@ -38,8 +50,7 @@ export class CampaignService {
 		email: string
 	): Promise<boolean> {
 		try {
-			const contract = await this.getContract();
-			await contract.methods.register(name, lastname, email).send({
+			await this.contract.methods.register(name, lastname, email).send({
 				from: address
 			});
 			return true;
@@ -56,8 +67,7 @@ export class CampaignService {
 		goal: number
 	): Promise<boolean> {
 		try {
-			const contract = await this.getContract();
-			await contract.methods.registerCampaign(category, title, description, goal).send({
+			await this.contract.methods.registerCampaign(category, title, description, goal).send({
 				from: address
 			});
 			return true;
@@ -68,8 +78,7 @@ export class CampaignService {
 
 	async getCampaignDetails(id: number): Promise<Campaign | null> {
 		try {
-			const contract = await this.getContract();
-			const campaignData = await contract.methods.getCampaign(id).call();
+			const campaignData = await this.contract.methods.getCampaign(id).call();
 			if (!campaignData) return null;
 			return this.parseCampaignData(campaignData);
 		} catch (error) {
@@ -77,7 +86,7 @@ export class CampaignService {
 		}
 	}
 
-	private async getContract() {
+	private getContract() {
 		const { abi, address } = config;
 		return new this.web3.eth.Contract(abi, address);
 	}
