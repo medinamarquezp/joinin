@@ -33,4 +33,5 @@ export interface Campaign {
 	createdAt: Date;
 	reachedAt: Date | null;
 	supporters: number;
+	supportersAddresses: string[];
 }

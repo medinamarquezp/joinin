@@ -86,6 +86,17 @@ export class CampaignService {
 		}
 	}
 
+	async signCampaign(address: string, id: number): Promise<boolean> {
+		try {
+			await this.contract.methods.signCampaign(id).send({
+				from: address
+			});
+			return true;
+		} catch (error) {
+			return false;
+		}
+	}
+
 	private getContract() {
 		const { abi, address } = config;
 		return new this.web3.eth.Contract(abi, address);
@@ -102,7 +113,8 @@ export class CampaignService {
 			createdAt: fromUnixTime(Number(campaignData.createdAt)),
 			goal: Number(campaignData.goal),
 			reachedAt: campaignData.reachedAt ? fromUnixTime(Number(campaignData.createdAt)) : null,
-			supporters: campaignData.supporters.length
+			supporters: campaignData.supporters.length,
+			supportersAddresses: campaignData.supporters
 		};
 	}
 }
