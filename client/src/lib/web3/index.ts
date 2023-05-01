@@ -1,8 +1,16 @@
 // @ts-nocheck
+import { get, upsert } from '$lib/stores/config.store';
+import { toast, toastTypes } from '$lib/toast';
 import Web3 from 'web3';
+import { config } from '../../config/platform.config';
 
 const networks = {
-	11155111: 'Sepolia'
+	1: 'Ehereum Mainnet',
+	5: 'Ehereum Goerli',
+	137: 'Polygon Mainnet',
+	5777: 'Ganache',
+	80001: 'Polygon Mumbai',
+	11155111: 'Ehereum Sepolia'
 };
 
 export const getNetworkName = (id: number): string => {
@@ -41,4 +49,28 @@ export const getWeb3 = () => {
 		return window.web3;
 	}
 	return null;
+};
+
+export const handleNetworkchanges = async () => {
+	window.ethereum.on('networkChanged', function (networkId) {
+		const network = getNetworkName(networkId);
+		const account = get('account');
+		upsert('network', networkId);
+		upsert('connection', `${network} (0x${account.slice(-5)})`);
+		toast(`Te has conectado a la red "${network}"`);
+		window.location.reload();
+	});
+};
+
+export const switchNetwork = async () => {
+	const { networkId } = config;
+	try {
+		await window.ethereum.request({
+			method: 'wallet_switchEthereumChain',
+			params: [{ chainId: getWeb3().utils.toHex(networkId) }]
+		});
+		toast(`Te has conectado a la red "${getNetworkName(networkId)}"`);
+	} catch (switchError) {
+		toast(`Parece que algo ha salido mal al cambiar de red`, toastTypes.ERROR);
+	}
 };
