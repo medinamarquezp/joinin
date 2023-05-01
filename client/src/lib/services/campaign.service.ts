@@ -15,6 +15,10 @@ export class CampaignService {
 		this.contract = this.getContract();
 	}
 
+	getContractDefinition() {
+		return this.contract;
+	}
+
 	async getCampaignIds(items: number, address?: string | null): Promise<string[]> {
 		let campaignIds;
 		if (address) {

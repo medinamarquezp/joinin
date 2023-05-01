@@ -19,7 +19,6 @@
 		if (!result) {
 			goto('/campaigns');
 		}
-		console.log(result);
 		campaign = result as Campaign;
 	});
 

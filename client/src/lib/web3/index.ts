@@ -1,8 +1,9 @@
 // @ts-nocheck
-import { get, upsert } from '$lib/stores/config.store';
-import { toast, toastTypes } from '$lib/toast';
 import Web3 from 'web3';
+import { toast, toastTypes } from '$lib/toast';
 import { config } from '../../config/platform.config';
+import { get, upsert } from '$lib/stores/config.store';
+import { getCampaignService } from '$lib/utilities/platform.utilities';
 
 const networks = {
 	1: 'Ehereum Mainnet',
@@ -52,7 +53,7 @@ export const getWeb3 = () => {
 };
 
 export const handleNetworkchanges = async () => {
-	window.ethereum.on('networkChanged', function (networkId) {
+	window.ethereum.on('networkChanged', (networkId) => {
 		const network = getNetworkName(networkId);
 		const account = get('account');
 		upsert('network', networkId);
@@ -73,4 +74,12 @@ export const switchNetwork = async () => {
 	} catch (switchError) {
 		toast(`Parece que algo ha salido mal al cambiar de red`, toastTypes.ERROR);
 	}
+};
+
+export const handleContractEvents = async () => {
+	const contract = getCampaignService().getContractDefinition();
+	if (!contract) return;
+	contract.events.allEvents().on('data', (event) => {
+		toast(`Nuevo evento en la red: ${event.returnValues._message}`);
+	});
 };

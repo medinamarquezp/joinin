@@ -2,7 +2,7 @@
 	import '../app.css';
 	import 'toastify-js/src/toastify.css';
 	import { onMount } from 'svelte';
-	import { getWeb3, handleNetworkchanges } from '$lib/web3';
+	import { getWeb3, handleContractEvents, handleNetworkchanges } from '$lib/web3';
 	import { clear } from '$lib/stores/config.store';
 	import Header from '$lib/components/layout/header.svelte';
 	import Footer from '$lib/components/layout/footer.svelte';
@@ -17,6 +17,7 @@
 
 	onMount(async () => {
 		await checkConnection();
+		await handleContractEvents();
 		await handleNetworkchanges();
 	});
 </script>
