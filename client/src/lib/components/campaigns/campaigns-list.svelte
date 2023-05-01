@@ -6,14 +6,11 @@
 	import { es } from 'date-fns/locale/index.js';
 	import { formatDistanceToNow } from 'date-fns';
 	import { IconSignature } from '@tabler/icons-svelte';
-	import { getWeb3 } from '$lib/web3';
 	import InfoMessage from '$lib/components/generics/info.svelte';
-	import { CampaignService } from '$lib/services/campaign.service';
+	import { getCampaignService } from '$lib/utilities/platform.utilities';
 
 	let getCampaigns = async (address?: string | null) => {
-		const web3 = getWeb3();
-		const campaignService = new CampaignService(web3);
-		return await campaignService.getCampaignList(items, address);
+		return await getCampaignService().getCampaignList(items, address);
 	};
 
 	let campaigns = getCampaigns(address);

@@ -1,8 +1,7 @@
 <script lang="ts">
-	import { getWeb3 } from '$lib/web3';
 	import { get } from '$lib/stores/config.store';
 	import { toast, toastTypes } from '$lib/toast';
-	import { CampaignService } from '$lib/services/campaign.service';
+	import { getCampaignService } from '$lib/utilities/platform.utilities';
 
 	let name = '';
 	let lastname = '';
@@ -16,13 +15,11 @@
 		if (!name || !lastname || !email) {
 			toast('Todos los campos son requeridos.', toastTypes.ERROR);
 		}
-		const web3 = getWeb3();
-		const campaingService = new CampaignService(web3);
-		const isActiveUser = await campaingService.isUserActive(address);
+		const isActiveUser = await getCampaignService().isUserActive(address);
 		if (isActiveUser) {
 			toast('Ya te has registrado con esta dirección.', toastTypes.ERROR);
 		}
-		const register = await campaingService.registerUser(address, name, lastname, email);
+		const register = await getCampaignService().registerUser(address, name, lastname, email);
 		if (register) {
 			toast('Usuario registrado correctamente', toastTypes.SUCCESS);
 			return true;

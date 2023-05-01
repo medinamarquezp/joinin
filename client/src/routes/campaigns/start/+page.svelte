@@ -1,10 +1,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { getWeb3 } from '$lib/web3';
 	import { goto } from '$app/navigation';
 	import { get } from '$lib/stores/config.store';
 	import { toast, toastTypes } from '$lib/toast';
-	import { CampaignService } from '$lib/services/campaign.service';
+	import { getCampaignService } from '$lib/utilities/platform.utilities';
 
 	const address = get('account') as string;
 	let category = 0;
@@ -12,17 +11,11 @@
 	let description = '';
 	let goal = 0;
 
-	const getService = () => {
-		const web3 = getWeb3();
-		return new CampaignService(web3);
-	};
-
 	onMount(async () => {
 		if (!address) {
 			goto('/register');
 		} else {
-			const campaingService = getService();
-			const isActiveUser = await campaingService.isUserActive(address);
+			const isActiveUser = await getCampaignService().isUserActive(address);
 			if (!isActiveUser) {
 				goto('/register');
 			}
@@ -42,8 +35,7 @@
 		if (!title || !description || !goal) {
 			toast('Todos los campos son requeridos.', toastTypes.ERROR);
 		}
-		const campaingService = getService();
-		const register = await campaingService.registerCampaign(
+		const register = await getCampaignService().registerCampaign(
 			address,
 			category,
 			title,

@@ -4,7 +4,7 @@
 	import { toast, toastTypes } from '$lib/toast';
 	import { connect, getNetworkName, getWeb3 } from '$lib/web3';
 	import { upsert, get, configStore } from '$lib/stores/config.store';
-	import { CampaignService } from '$lib/services/campaign.service';
+	import { getCampaignService } from '$lib/utilities/platform.utilities';
 
 	const handleConnect = async () => {
 		try {
@@ -25,9 +25,7 @@
 	const checkActiveUser = async () => {
 		const account = get('account') as string;
 		if (!account) return false;
-		const web3 = getWeb3();
-		const campaignService = new CampaignService(web3);
-		return await campaignService.isUserActive(account);
+		return await getCampaignService().isUserActive(account);
 	};
 
 	let isActiveUser = false;
