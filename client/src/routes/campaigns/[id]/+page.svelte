@@ -3,8 +3,12 @@
 	import { formatDistanceToNow } from 'date-fns';
 	import { IconSignature, IconTag, IconChartArcs, IconTarget } from '@tabler/icons-svelte';
 	import type { PageData } from './$types';
+	import { get } from '$lib/stores/config.store';
+	import Info from '$lib/components/generics/info.svelte';
+
 	export let data: PageData;
 	let { title, description, createdAt, category, status, supporters, goal } = data.campaign;
+	let address = get('account');
 </script>
 
 <div class="campaign">
@@ -12,11 +16,17 @@
 	<small>Publicada hace {formatDistanceToNow(createdAt, { locale: es })}</small>
 	<p>{description}</p>
 	{#if status === 'Abierta'}
-		<a class="btn" href="/"
-			><IconSignature size={20} stroke={2} class="mr-2" /> Firmar esta campaña</a
-		>
+		{#if address}
+			<a class="btn" href="/"
+				><IconSignature size={20} stroke={2} class="mr-2" /> Firmar esta campaña</a
+			>
+		{:else}
+			<p class="font-bold">
+				<Info message="Debes conectarte con tu cartera y estar registrado para firmar campañas." />
+			</p>
+		{/if}
 	{:else}
-		<p class="font-bold">Esta campaña no permite registrar nuevas firmas</p>
+		<Info message="Esta campaña no permite registrar nuevas firmas." />
 	{/if}
 	<div class="details">
 		<div class="summary">
