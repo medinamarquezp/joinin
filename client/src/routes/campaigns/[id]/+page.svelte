@@ -7,7 +7,8 @@
 	import Info from '$lib/components/generics/info.svelte';
 
 	export let data: PageData;
-	let { title, description, createdAt, category, status, supporters, goal } = data.campaign;
+	let { title, description, createdAt, category, status, supporters, goal, ownerAddress } =
+		data.campaign;
 	let address = get('account');
 </script>
 
@@ -17,13 +18,15 @@
 	<p>{description}</p>
 	{#if status === 'Abierta'}
 		{#if address}
-			<a class="btn" href="/"
-				><IconSignature size={20} stroke={2} class="mr-2" /> Firmar esta campaña</a
-			>
+			{#if address !== ownerAddress}
+				<a class="btn" href="/"
+					><IconSignature size={20} stroke={2} class="mr-2" /> Firmar esta campaña</a
+				>
+			{:else}
+				<Info message="No puedes firmar tus propias campañas." />
+			{/if}
 		{:else}
-			<p class="font-bold">
-				<Info message="Debes conectarte con tu cartera y estar registrado para firmar campañas." />
-			</p>
+			<Info message="Debes conectarte con tu cartera y estar registrado para firmar campañas." />
 		{/if}
 	{:else}
 		<Info message="Esta campaña no permite registrar nuevas firmas." />
