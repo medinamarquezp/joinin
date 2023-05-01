@@ -13,7 +13,7 @@
 			const networkId = await web3.eth.net.getId();
 			if (networkId && accounts.length) {
 				upsert('connection', `${getNetworkName(networkId)} (0x${accounts[0].slice(-5)})`);
-				upsert('network', getNetworkName(networkId));
+				upsert('network', networkId);
 				upsert('account', accounts[0]);
 			}
 		} catch (err) {

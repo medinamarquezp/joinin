@@ -8,7 +8,7 @@
 	let mainNetwork = Number(env.PUBLIC_NETWORK_ID);
 </script>
 
-{#if currentNetwork !== mainNetwork}
+{#if currentNetwork && currentNetwork !== mainNetwork}
 	<div class="network-container">
 		<IconAlertTriangle size={32} stroke={2} class="mr-2" />
 		Te encuentras en la red <b>{getNetworkName(currentNetwork)}</b> y esta aplicación solo está
