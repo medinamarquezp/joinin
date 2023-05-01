@@ -1,12 +1,12 @@
 import type Web3 from 'web3';
 import { fromUnixTime } from 'date-fns';
-import { env } from '$env/dynamic/public';
 import {
 	CampaignCategories,
 	type Campaign,
 	CampaignStatus,
 	type ContractCampaign
 } from '$lib/types/campaign.types';
+import { config } from '../../config/platform.config';
 
 export class CampaignService {
 	constructor(private web3: Web3) {}
@@ -78,8 +78,7 @@ export class CampaignService {
 	}
 
 	private async getContract() {
-		const abi = JSON.parse(env.PUBLIC_CAMPAIGNS_ABI);
-		const address = env.PUBLIC_CAMPAIGNS_ADDRESS;
+		const { abi, address } = config;
 		return new this.web3.eth.Contract(abi, address);
 	}
 
