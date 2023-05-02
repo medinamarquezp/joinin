@@ -62,7 +62,9 @@ contract Campaigns is Ownable {
         Categories _category,
         string memory _title,
         string memory _description,
-        uint256 _goal
+        uint256 _goal,
+        string memory _mainImage,
+        string memory _document
     ) public returns (uint256) {
         require(
             isUserActive(msg.sender),
@@ -79,7 +81,9 @@ contract Campaigns is Ownable {
             goal: _goal,
             createdAt: block.timestamp,
             reachedAt: 0,
-            supporters: new address[](0)
+            supporters: new address[](0),
+            mainImage: _mainImage,
+            document: _document
         });
         userCampaigns[msg.sender].push(id);
         categoriesCampaigns[_category].push(id);

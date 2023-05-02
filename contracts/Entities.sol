@@ -31,4 +31,6 @@ struct Campaign {
     uint256 createdAt;
     uint256 reachedAt;
     address[] supporters;
+    string mainImage;
+    string document;
 }
