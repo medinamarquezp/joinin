@@ -20,6 +20,8 @@ export interface ContractCampaign {
 	goal: string;
 	reachedAt: string;
 	supporters: string[];
+	mainImage: string;
+	document: string;
 }
 
 export interface Campaign {
@@ -34,4 +36,6 @@ export interface Campaign {
 	reachedAt: Date | null;
 	supporters: number;
 	supportersAddresses: string[];
+	mainImage: string;
+	document: string;
 }

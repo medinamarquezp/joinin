@@ -4,7 +4,7 @@
 	import type { PageData } from './$types';
 	import { es } from 'date-fns/locale/index.js';
 	import { formatDistanceToNow } from 'date-fns';
-	import { IconSignature, IconTag, IconChartArcs, IconTarget } from '@tabler/icons-svelte';
+	import { IconSignature, IconTag, IconChartArcs, IconTarget, IconPdf } from '@tabler/icons-svelte';
 	import { toast, toastTypes } from '$lib/toast';
 	import { get } from '$lib/stores/config.store';
 	import Info from '$lib/components/generics/info.svelte';
@@ -37,6 +37,9 @@
 	{#if campaign}
 		<h1>{campaign.title}</h1>
 		<small>Publicada hace {formatDistanceToNow(campaign.createdAt, { locale: es })}</small>
+		{#if campaign.mainImage}
+			<img class="mt-4" src="https://{campaign.mainImage}" alt={campaign.title} />
+		{/if}
 		<p>{campaign.description}</p>
 		{#if campaign.status === 'Abierta'}
 			{#if address}
@@ -73,6 +76,12 @@
 					<IconSignature size={20} stroke={2} class="mr-2" />
 					{campaign.supporters} firmantes de {campaign.goal}
 				</p>
+				{#if campaign.document}
+					<p>
+						<IconPdf size={20} stroke={2} class="mr-2" />
+						<a href="https://{campaign.document}">Descargar documento de campaña</a>
+					</p>
+				{/if}
 			</div>
 			<div class="supporters">
 				<h2>Firmantes</h2>

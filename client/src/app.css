@@ -67,7 +67,10 @@
 		@apply w-full max-w-lg;
 	}
 	form .field {
-		@apply flex items-start mb-6;
+		@apply flex items-center mb-6;
+	}
+	form .field.start {
+		@apply items-start;
 	}
 	form .field .label {
 		@apply w-2/6;
@@ -82,6 +85,13 @@
 	form .field .input input,
 	form .field .input textarea {
 		@apply bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-slate-700 leading-tight focus:outline-none focus:bg-white focus:border-slate-500;
+	}
+	form .field .file {
+		@apply block w-full border border-gray-200 shadow-sm rounded-md text-sm focus:z-10
+		file:bg-transparent file:border-0
+		file:bg-white file:mr-4
+		file:py-3 file:px-4
+		dark:file:bg-violet-900 hover:file:bg-violet-950 dark:file:text-white;
 	}
 	form .btn {
 		@apply bg-violet-900 hover:bg-violet-950 text-white py-2 px-6 rounded;

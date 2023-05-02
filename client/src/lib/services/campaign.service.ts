@@ -68,12 +68,16 @@ export class CampaignService {
 		category: number,
 		title: string,
 		description: string,
-		goal: number
+		goal: number,
+		mainImage: string,
+		document: string
 	): Promise<boolean> {
 		try {
-			await this.contract.methods.registerCampaign(category, title, description, goal).send({
-				from: address
-			});
+			await this.contract.methods
+				.registerCampaign(category, title, description, goal, mainImage, document)
+				.send({
+					from: address
+				});
 			return true;
 		} catch (error) {
 			return false;
@@ -118,7 +122,9 @@ export class CampaignService {
 			goal: Number(campaignData.goal),
 			reachedAt: campaignData.reachedAt ? fromUnixTime(Number(campaignData.createdAt)) : null,
 			supporters: campaignData.supporters.length,
-			supportersAddresses: campaignData.supporters
+			supportersAddresses: campaignData.supporters,
+			mainImage: campaignData.mainImage,
+			document: campaignData.document
 		};
 	}
 }
