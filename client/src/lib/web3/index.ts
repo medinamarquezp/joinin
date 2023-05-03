@@ -1,7 +1,7 @@
 // @ts-nocheck
 import Web3 from 'web3';
 import { toast, toastTypes } from '$lib/toast';
-import { config } from '../../config/platform.config';
+import { config } from '../../config';
 import { get, upsert } from '$lib/stores/config.store';
 import { getCampaignService } from '$lib/utilities/platform.utilities';
 

@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { env } from '$env/dynamic/public';
+	import { config } from '../../../config';
 	import { get } from '$lib/stores/config.store';
 	import { getNetworkName, switchNetwork } from '$lib/web3';
 	import { IconAlertTriangle } from '@tabler/icons-svelte';
 
 	let currentNetwork = Number(get('network'));
-	let mainNetwork = Number(env.PUBLIC_NETWORK_ID);
+	let mainNetwork = Number(config.networkId);
 </script>
 
 {#if currentNetwork && currentNetwork !== mainNetwork}

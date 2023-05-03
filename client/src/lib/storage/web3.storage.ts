@@ -1,9 +1,9 @@
-import { env } from '$env/dynamic/public';
+import { config } from '../../config';
 import { Web3Storage } from 'web3.storage';
 
 const maxRetries = 3;
 const w3sgateway = 'ipfs.w3s.link';
-const client = new Web3Storage({ token: env.PUBLIC_STORAGE_API_TOKEN as string });
+const client = new Web3Storage({ token: config.storageAPIToken });
 
 export const put = async (element: HTMLInputElement) => {
 	const files = element.files as FileList;

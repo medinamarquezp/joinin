@@ -6,7 +6,7 @@ import {
 	CampaignStatus,
 	type ContractCampaign
 } from '$lib/types/campaign.types';
-import { config } from '../../config/platform.config';
+import { config } from '../../config';
 
 export class CampaignService {
 	private contract;
