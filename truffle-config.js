@@ -1,12 +1,18 @@
 require("dotenv").config();
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 
-const { SIGNER_PRIVATE_KEY, ETH_SCAN_API_KEY, ETH_SEPOLIA_TESTNET_RPC } =
-  process.env;
+const {
+  SIGNER_PRIVATE_KEY,
+  ETH_SCAN_API_KEY,
+  ETH_SEPOLIA_TESTNET_RPC,
+  POLYGON_SCAN_API_KEY,
+  POLYGON_MUMBAI_TESTNET_RPC,
+} = process.env;
 
 module.exports = {
   api_keys: {
     etherscan: ETH_SCAN_API_KEY,
+    polygonscan: POLYGON_SCAN_API_KEY,
   },
   networks: {
     // Default network
@@ -30,6 +36,14 @@ module.exports = {
       timeoutBlocks: 200,
       skipDryRun: true,
     },
+    mumbai: {
+      provider: () =>
+        new HDWalletProvider(SIGNER_PRIVATE_KEY, POLYGON_MUMBAI_TESTNET_RPC),
+      network_id: 80001,
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true,
+    },
   },
 
   // Set default mocha options here, use special reporters, etc.
@@ -44,5 +58,5 @@ module.exports = {
     },
   },
   plugins: ["truffle-plugin-verify"],
-  api_keys: { etherscan: ETH_SCAN_API_KEY },
+  api_keys: { polygonscan: POLYGON_SCAN_API_KEY },
 };
