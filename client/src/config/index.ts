@@ -1,4 +1,8 @@
-import { config as devConfig } from './dev.config';
-import { config as prodConfig } from './prod.config';
+import { env } from '$env/dynamic/public';
 
-export const config = process.env.NODE_ENV === 'development' ? devConfig : prodConfig;
+export const config = {
+	networkId: env.PUBLIC_NETWORK_ID,
+	abi: JSON.parse(env.PUBLIC_CAMPAIGNS_ABI),
+	address: env.PUBLIC_CAMPAIGNS_ADDRESS,
+	storageAPIToken: env.PUBLIC_STORAGE_API_TOKEN
+};
